@@ -8,6 +8,7 @@ class LinkedList {
   constructor() {
     this.head = null;
     this.tail = null;
+    this.size = 0;
   }
 
   append(value) {
@@ -16,9 +17,11 @@ class LinkedList {
     if (this.head === null) {
       this.head = newNode;
       this.tail = newNode;
+      this.size++;
     } else {
       this.tail.nextNode = newNode;
       this.tail = newNode;
+      this.size++;
     }
   }
 
@@ -27,24 +30,16 @@ class LinkedList {
     if (this.head === null) {
       this.head = newNode;
       this.tail = newNode;
+      this.size++;
     } else {
       newNode.nextNode = this.head;
       this.head = newNode;
+      this.size++;
     }
   }
 
-  size() {
-    let i = 0;
-    if (this.head === null) {
-      return i;
-    } else {
-      let currentNode = this.head;
-      while (currentNode !== null) {
-        i++;
-        currentNode = currentNode.nextNode;
-      }
-      return i;
-    }
+  getSize() {
+    return this.size;
   }
 
   getHead() {
@@ -54,15 +49,135 @@ class LinkedList {
   getTail() {
     return this.tail.value;
   }
+
+  at(index) {
+    if (this.head === null || index < 0) {
+      return null;
+    }
+
+    let currentNode = this.head;
+    let i = 0;
+
+    while (i < index && currentNode !== null) {
+      currentNode = currentNode.nextNode;
+      i++;
+    }
+
+    if (currentNode === null) {
+      return null;
+    } else {
+      return currentNode.value;
+    }
+  }
+
+  pop() {
+    if (this.head === null) {
+      console.log("The list is already empty");
+    } else if (this.head === this.tail) {
+      this.head = this.tail = null;
+      this.size = 0;
+    } else {
+      let currentNode = this.head;
+      while (currentNode.nextNode !== this.tail) {
+        currentNode = currentNode.nextNode;
+      }
+      currentNode.nextNode = null;
+      this.tail = currentNode;
+      this.size--;
+    }
+  }
+
+  contains(value) {
+    if (this.head === null) {
+      console.log("The list is empty");
+      return false;
+    }
+    let currentNode = this.head;
+    while (currentNode !== null) {
+      if (currentNode.value === value) {
+        return true;
+      } else {
+        currentNode = currentNode.nextNode;
+      }
+    }
+    return false;
+  }
+
+  find(value) {
+    if (this.head === null) {
+      console.log("The list is empty");
+      return null;
+    }
+    let currentNode = this.head;
+    let i = 0;
+    while (currentNode !== null) {
+      if (currentNode.value === value) {
+        return i;
+      } else {
+        currentNode = currentNode.nextNode;
+        i++;
+      }
+    }
+    return null;
+  }
+
+  toString() {
+    let string = "";
+    if (this.head === null) {
+      console.log("The list is empty");
+      string += `No items `;
+      return string;
+    }
+    let currentNode = this.head;
+    while (currentNode !== null) {
+      string += `( ${currentNode.value} ) -> `;
+      currentNode = currentNode.nextNode;
+    }
+    string += `null`;
+    return string;
+  }
+
+  insertAt(value, index) {
+    if (index < 0 || index > this.size) {
+      console.log("out of bounds");
+      return;
+    }
+
+    if (index === 0) {
+      this.prepend(value);
+      return;
+    } else if (index === this.size) {
+      this.append(value);
+      return;
+    }
+
+    let currentNode = this.head;
+    let i = 0;
+
+    while (i < index - 1) {
+      currentNode = currentNode.nextNode;
+      i++;
+    }
+
+    let previousNode = currentNode;
+    let newNode = new ListNode(value);
+
+    newNode.nextNode = previousNode.nextNode;
+    previousNode.nextNode = newNode;
+    this.size++;
+  }
+
+  removeAt(index) {
+    if (index < 0 || index > this.size) {
+      console.log("out of bounds");
+      return;
+    }
+  }
 }
 
 let list = new LinkedList();
 list.append("dog");
 list.append("cat");
 list.append("horse");
-console.log(list);
 list.prepend("snake");
-console.log(list);
-console.log(list.size());
-console.log(list.getHead());
-console.log(list.getTail());
+console.log(list.toString());
