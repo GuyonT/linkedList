@@ -168,10 +168,32 @@ class LinkedList {
   }
 
   removeAt(index) {
-    if (index < 0 || index > this.size) {
+    if (index < 0 || index >= this.size) {
       console.log("out of bounds");
       return;
+    } else if (index === 0) {
+      this.head = this.head.nextNode;
+      this.size--;
+      return;
     }
+
+    if (index === this.size - 1) {
+      this.pop();
+      return;
+    }
+
+    let currentNode = this.head;
+    let i = 0;
+    while (i < index - 1) {
+      currentNode = currentNode.nextNode;
+      i++;
+    }
+
+    let previousNode = currentNode;
+    let nextNode = currentNode.nextNode.nextNode;
+
+    previousNode.nextNode = nextNode;
+    this.size--;
   }
 }
 
